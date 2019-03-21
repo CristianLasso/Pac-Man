@@ -28,7 +28,7 @@ public class Score {
 	
 	@Override
 	public String toString() {
-		String msg = name + ": " + score + ".";
+		String msg = name + ":" + "\t\t" + score + ".";
 		
 		return msg;
 	}

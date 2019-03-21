@@ -5,15 +5,15 @@ import ui.PacManController;
 
 public class ControlThread extends Thread{
 	
-	private PacManController pcc;
+	private PacManController pc;
 	
-	public ControlThread(PacManController pcc) {
-		this.pcc = pcc;
+	public ControlThread(PacManController pc) {
+		this.pc = pc;
 	}
 	
 	public void run() {
 		while (true) {
-			PacManThread pt = new PacManThread(pcc);
+			PacManThread pt = new PacManThread(pc);
 			Platform.runLater(pt);
 
 			try {

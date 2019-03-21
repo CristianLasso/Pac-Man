@@ -12,6 +12,10 @@ public class PacMan {
 	private int bounces;
 	private boolean stoped;
 	
+	private int angle;
+	private int length;
+	private boolean keep;
+	
 	
 	public PacMan(int r, int x, int y, int w, int b, boolean s, Move st) {
 		radius = r;
@@ -21,6 +25,9 @@ public class PacMan {
 		bounces = b;
 		stoped = s;
 		state = st;
+		
+		keep = true;
+		length = 270;
 	}
 
 	public int getRadius() {
@@ -71,24 +78,84 @@ public class PacMan {
 		this.stoped = stoped;
 	}
 	
-	public void move(int max) {
+	public int getAngle() {
+		return angle;
+	}
+
+	public void setAngle(int angle) {
+		this.angle = angle;
+	}
+	
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+	
+	public void move(int max, int maxY) {
 		switch(state) {
 			case RIGHT:
-				if(LayoutX+ADVANCE+radius>max) {
-					state = Move.LEFT;
-					LayoutX = max-radius;
+				angle = 0;
+				mouth();
+				if(LayoutX+ADVANCE+radius<max) {
+
+					LayoutX = LayoutX+ADVANCE;
 				}else {
-					LayoutX = LayoutX+ADVANCE;					
+					state = Move.LEFT;
+					LayoutX = max-radius;					
 				}
 			break;
 			case LEFT:
-				if(LayoutX-ADVANCE-radius<0) {
+				angle = 180;
+				mouth();
+				if(LayoutX-ADVANCE-radius>0) {
+					LayoutX = LayoutX-ADVANCE;
+				}else {
 					state = Move.RIGHT;
 					LayoutX = radius;
-				}else {
-					LayoutX = LayoutX-ADVANCE;					
 				}
 			break;
+			case UP:
+				angle = 270;
+				mouth();
+				if(LayoutY-ADVANCE-radius>0) {
+					LayoutY = LayoutY-ADVANCE;
+				}else {
+					state = Move.DOWN;
+					LayoutY = radius;
+				}
+			break;
+			case DOWN:
+				angle = 90;
+				mouth();
+				if(LayoutY+ADVANCE+radius<maxY) {
+
+					LayoutY = LayoutY+ADVANCE;
+				}else {
+					state = Move.UP;
+					LayoutY = maxY-radius;					
+				}
+			break;
+		}
+	}
+	
+	public void mouth() {
+		if(keep) {
+			length = length+4;
+			//angle = angle+2;
+		}
+		if(length>=360) {
+			keep = false;
+		}
+		
+		if(!keep) {
+			length = length-4;
+			//angle = angle-2;
+		}
+		if(length<270) {
+			keep = true;
 		}
 	}
 	

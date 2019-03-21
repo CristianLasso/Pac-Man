@@ -1,0 +1,7 @@
+#level
+1
+#Radius LayoutX LayoutY Wait Direction Bounces Stoped
+30-0-90-8-LEFT-0-false
+20-150-10-10-UP-0-false
+40-50-10-13-DOWN-0-false
+30-0-70-15-RIGHT-0-false

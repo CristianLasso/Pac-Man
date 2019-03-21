@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Move;
 import model.PacMan;
+import model.Score;
 import thread.ControlThread;
 import thread.MoveThread;
 
@@ -73,8 +74,35 @@ public class PacManController {
     private ArrayList<Arc> arcPacs;
 
     @FXML
-    void scores(ActionEvent event) {
-
+    void scores(ActionEvent event) throws IOException {
+    	Alert info = new Alert(AlertType.INFORMATION);
+    	info.setTitle("Hall Of Fame");
+    	info.setHeaderText(null);
+    	info.initStyle(StageStyle.UTILITY);
+    	
+    	File f = new File("txts/Hall.txt");
+		FileReader fr = new FileReader(f);
+		BufferedReader br = new BufferedReader(fr);
+		
+		String line = br.readLine();
+		String txt = "";
+		while(line != null) {
+			String[] parts = line.split("-");
+			
+			String name = parts[0];
+			int score = Integer.parseInt(parts[1]);
+			
+			Score s = new Score(name, score);
+			txt = txt+s+"\n";
+			
+			line = br.readLine();
+		}
+		
+		br.close();
+		fr.close();
+    	
+    	info.setContentText(txt);
+    	info.show();
     }
     
     @FXML
@@ -102,70 +130,27 @@ public class PacManController {
     void load0(ActionEvent event) throws IOException{
     	String path = "txts/level0.txt";
     	loadLevel(path);
+    	load.setDisable(true);
     }
 
     @FXML
     void load1(ActionEvent event) {
-
+    	String path = "txts/level1.txt";
+    	loadLevel(path);
+    	load.setDisable(true);
     }
 
     @FXML
     void load2(ActionEvent event) {
-
+    	String path = "txts/level2.txt";
+    	loadLevel(path);
+    	load.setDisable(true);
     }
 
     @FXML
     void save(ActionEvent event) {
 
     }
-    
-    /*public boolean pacManClose(boolean keep) {
-    	for(int i=0; i<arcPacs.size(); i++) {
-    	if(keep) {
-    		arcPacs.get(i).setLength(arcPacs.get(i).getLength()+5);
-    		arcPacs.get(i).setStartAngle(arcPacs.get(i).getStartAngle()-2);
-    	}
-    	if(arcPacs.get(i).getLength()>=360) {
-    		keep = false;
-    	}
-    	}
-    	return keep;
-    }
-    
-    public boolean pacManOpen(boolean keep) {
-    	for(int i=0; i<arcPacs.size(); i++) {
-    	if(!keep) {
-    		arcPacs.get(i).setLength(arcPacs.get(i).getLength()-5);
-    		arcPacs.get(i).setStartAngle(arcPacs.get(i).getStartAngle()+2);
-    	}
-    	if(arcPacs.get(i).getLength()<270) {
-    		keep = true;
-    	}
-    	}
-    	return keep;
-    }*/
-    
-    /*public boolean right(boolean right, Arc pac) {
-    	if(pac.getLayoutX()>=pane.getWidth()-pac.getRadiusX()) {
-    		right = false;
-    		pac.setRotate(180);
-		}
-    	if(right) {
-    		pac.setLayoutX(pac.getLayoutX()+5);
-    	}
-    	return right;
-    }
-    
-    public boolean left(boolean right, Arc pac) {
-    	if(pac.getLayoutX()<=pac.getRadiusX()) {
-    		right = true;
-    		pac.setRotate(0);
-		}	
-    	if(!right) {
-    		pac.setLayoutX(pac.getLayoutX()-5);
-    	}
-		return right;
-    }*/
     
     public void loadLevel(String path) {
     	int radius = 0;
@@ -196,7 +181,6 @@ public class PacManController {
 				wait = Integer.parseInt(variables[3]);
 				direction = variables[4];
 				bounces = Integer.parseInt(variables[5]);
-				stoped = Boolean.parseBoolean(variables[6]);
 				
 				Move move;
 				
@@ -204,8 +188,10 @@ public class PacManController {
 					move = Move.RIGHT;
 				}else if(direction.equals("LEFT")) {
 					move = Move.LEFT;
+				}else if(direction.equals("UP")){
+					move = Move.UP;
 				}else {
-					move = Move.LEFT;
+					move = Move.DOWN;
 				}
 				
 				if(variables[6]=="false") {
@@ -245,7 +231,9 @@ public class PacManController {
     public void update() {
     	for (int id = 0; id < arcPacs.size(); id++) {
     		arcPacs.get(id).setLayoutX(pacs.get(id).getLayoutX());
-    		arcPacs.get(id).setLayoutY(pacs.get(id).getLayoutY());			
+    		arcPacs.get(id).setLayoutY(pacs.get(id).getLayoutY());
+    		arcPacs.get(id).setRotate(pacs.get(id).getAngle());
+    		arcPacs.get(id).setLength(pacs.get(id).getLength());
 		}
     }
     
@@ -253,12 +241,12 @@ public class PacManController {
 		return stage.getScene().getWidth();
 	}
     
+    public double geTHeigth() {
+		return stage.getScene().getHeight();
+	}
+    
     public void setStage(Stage st) {
     	stage = st;
-    }
-    
-    public ArrayList<Arc> getList() {
-    	return arcPacs;
     }
 
     @FXML
