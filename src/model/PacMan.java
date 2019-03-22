@@ -1,6 +1,8 @@
 package model;
 
-public class PacMan {
+import java.io.Serializable;
+
+public class PacMan implements Serializable{
 	
 	public static final int ADVANCE = 5;
 	

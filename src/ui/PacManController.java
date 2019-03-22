@@ -2,8 +2,10 @@ package ui;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -148,8 +150,10 @@ public class PacManController {
     }
 
     @FXML
-    void save(ActionEvent event) {
-
+    void save(ActionEvent event) throws IOException{
+    	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("txts/new.txt"));
+    	oos.writeObject(pacs);
+    	oos.close();
     }
     
     public void loadLevel(String path) {
